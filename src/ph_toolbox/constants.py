@@ -1,0 +1,6 @@
+CONFIG_DEBUG = "debug"
+CONFIG_LOG_LEVEL = "log_level"
+CONFIG_DIR_MODULE = "dir_module"
+CONFIG_DIR_BASE = "dir_base"
+CONFIG_DIR_SRC = "dir_src"
+CONFIG_SESS_NAME = "sess_name"
