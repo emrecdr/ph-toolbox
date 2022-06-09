@@ -18,6 +18,7 @@ isort = "*"
 mypy = "*"
 pylint = "*"
 pre-commit = "*"
+types-requests = "*"
 
 [requires]
 python_version = "3.9"

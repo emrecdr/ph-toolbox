@@ -37,8 +37,8 @@ test-clean-run: test-clean test
 test-pdb:
 	pipenv run pytest -xvv --tb=short --log-file-level=DEBUG --pdb
 
-.PHONY: show-coverage
-show-coverage:
+.PHONY: show-cov
+show-cov:
 	pipenv run python -c "import webbrowser; webbrowser.open_new_tab('file://${PWD}/.htmlcov/index.html')"
 
 .PHONY: show-tests

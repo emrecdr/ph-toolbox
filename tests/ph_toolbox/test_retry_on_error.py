@@ -41,22 +41,17 @@ class MockLogger:
 
 
 roe_logger = MockLogger()
-roe_params1 = RetryOnErrorArgs(n_max_try=5,
-                               delay=0.01,
-                               on_error=roe_logger.error,
-                               on_error_resolved=roe_logger.info,
-                               on_fatal_error=roe_logger.fatal)
+roe_params1 = RetryOnErrorArgs(
+    n_max_try=5,
+    delay=0.01,
+    on_error=roe_logger.error,
+    on_error_resolved=roe_logger.info,
+    on_fatal_error=roe_logger.fatal,
+)
 
-roe_params2 = RetryOnErrorArgs(n_max_try=3,
-                               delay=0.01,
-                               on_fatal_error=roe_logger.fatal)
+roe_params2 = RetryOnErrorArgs(n_max_try=3, delay=0.01, on_fatal_error=roe_logger.fatal)
 
-
-roe_params3 = RetryOnErrorArgs(n_max_try=5,
-                               delay=0.01,
-                               on_error=True,
-                               on_error_resolved=True,
-                               on_fatal_error=True)
+roe_params3 = RetryOnErrorArgs(n_max_try=5, delay=0.01, on_error=True, on_error_resolved=True, on_fatal_error=True)
 
 
 class DemoApp1:
@@ -125,7 +120,6 @@ class DemoApp1:
 
         self.logger.success("Success action_pass_if_param_is_ok_3")
         return "Executed: action_pass_if_param_is_ok_3"
-
 
 
 # #########################################################
@@ -220,7 +214,7 @@ def test_fail_3_times_then_success_with_incorrect_logger(app: DemoApp1):
         "Recoverable error (#1 @ DemoApp1.action_fail_n_times_2) DemoAppError: Sorry, try again.",
         "Recoverable error (#2 @ DemoApp1.action_fail_n_times_2) DemoAppError: Sorry, try again.",
         "Recoverable error (#3 @ DemoApp1.action_fail_n_times_2) DemoAppError: Sorry, try again.",
-        "Error resolved (#4 @ DemoApp1.action_fail_n_times_2)"
+        "Error resolved (#4 @ DemoApp1.action_fail_n_times_2)",
     ]
 
     assert len(roe_logger.logs["info"]) == 0
@@ -232,3 +226,5 @@ def test_fail_3_times_then_success_with_incorrect_logger(app: DemoApp1):
     assert len(app.logger.logs["success"]) == 1
     assert len(app.logger.logs["error"]) == 3
     assert len(app.logger.logs["fatal"]) == 0
+
+    assert resp == "Executed: action_fail_n_times_2"

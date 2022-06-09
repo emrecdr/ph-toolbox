@@ -3,8 +3,8 @@ import sys
 
 from pytest import fixture, mark, param, raises
 
-from src.ph_toolbox.config import Config, config, ConfigError
 from src.ph_toolbox import constants as c
+from src.ph_toolbox.config import Config, ConfigError, config
 
 
 @fixture(autouse=True)

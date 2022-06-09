@@ -120,7 +120,9 @@ class RetryOnError:
             for tb in traceback.format_tb(exception_traceback, -6)
         ][::-1]
 
-    def error_handler(self, exc: Exception, n_try: int, is_recoverable: bool, args, kwargs, cls_name: str, fn_name: str):
+    def error_handler(
+        self, exc: Exception, n_try: int, is_recoverable: bool, args, kwargs, cls_name: str, fn_name: str
+    ):
         if is_recoverable and self._args.on_error is None:
             return
 
@@ -139,9 +141,10 @@ class RetryOnError:
             error_data=self.get_last_err_data(),
         )
 
-        if is_recoverable:
+        if is_recoverable and self._args.on_error is not None:
             self._args.on_error(params)
-        else:
+
+        if not is_recoverable and self._args.on_fatal_error is not None:
             args_ = [str(a) for a in args]
             kwargs_ = ["{0}={1}".format(k, v) for (k, v) in kwargs.items()]
             fn_params = args_ + kwargs_
