@@ -80,6 +80,8 @@ class RetryOnError:
 
     def __call__(self, fn):
         def wrapper(instance, *args, **kwargs):
+            if "retry_on_error" in kwargs and isinstance(kwargs["retry_on_error"], RetryOnErrorArgs):
+                self._args = kwargs.pop("retry_on_error", None)
             n_try = 0
             keep_trying = True
             while keep_trying:
