@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import argparse
 import os
 import pathlib
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from . import constants as c
 
@@ -116,14 +118,28 @@ class Config:
         return cls.get_config(key=key, required=True)
 
     @classmethod
-    def set_config(cls, key: str, val):
+    def set_config(cls, key: str, val: Any, ignore_if_exists: bool = False) -> None:
         if not cls._INITIALIZED:
             cls._initialize()
+
+        if key in cls._CONFIG and ignore_if_exists:
+            return
 
         cls._CONFIG[key] = val
 
     @classmethod
-    def set_tag(cls, tag_key: str, config_keys: list, is_new: bool = True):
+    def set_configs(cls, *key_value_pairs: Tuple | List, ignore_if_exists: bool = False) -> None:
+        if not cls._INITIALIZED:
+            cls._initialize()
+
+        for key, val in key_value_pairs:
+            if key in cls._CONFIG and ignore_if_exists:
+                continue
+
+            cls._CONFIG[key] = val
+
+    @classmethod
+    def set_tag(cls, tag_key: str, config_keys: list, is_new: bool = True) -> None:
         if not cls._INITIALIZED:
             cls._initialize()
 
