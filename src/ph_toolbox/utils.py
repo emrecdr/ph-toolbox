@@ -1,4 +1,5 @@
 import logging
+import re
 import sys
 from logging.handlers import TimedRotatingFileHandler
 from typing import Dict, Optional
@@ -42,3 +43,11 @@ def get_logger(name: Optional[str] = None) -> logging.Logger:
     LOGGERS[name] = logger
 
     return logger
+
+
+def slugify(s):
+    s = s.lower().strip()
+    s = re.sub(r"[^\w\s-]", "", s)
+    s = re.sub(r"[\s_-]+", "-", s)
+    s = re.sub(r"^-+|-+$", "", s)
+    return s
