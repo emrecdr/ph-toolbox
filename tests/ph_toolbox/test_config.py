@@ -37,15 +37,51 @@ def initial_conf():
             id="debugging_with_warning_level",
         ),
         param(
-            ["--debug", "--log-level", "WARNING", "--"],
-            {c.CONFIG_DEBUG: True, c.CONFIG_LOG_LEVEL: "WARNING"},
-            id="debugging_with_warning_level",
+            ["--debug", "--log-level", "ERROR", "--"],
+            {c.CONFIG_DEBUG: True, c.CONFIG_LOG_LEVEL: "ERROR"},
+            id="debugging_with_error_level",
+        ),
+        param(
+            ["--log-level", "ERROR"],
+            {c.CONFIG_DEBUG: False, c.CONFIG_LOG_LEVEL: "ERROR"},
+            id="error_level_only",
         ),
     ],
 )
 def test_cli_args_config(monkeypatch, initial_conf, cli_args, expected_updates):
     with monkeypatch.context() as mpctx:
         mpctx.setattr(sys, "argv", ["config.py", *cli_args])
+        expected = {**initial_conf, **expected_updates}
+        actual = Config.all()
+        assert actual == expected
+
+        for key, value in expected_updates.items():
+            assert config(key) == value
+            assert Config.get_config(key) == value
+
+
+@mark.parametrize(
+    "cli_args,custom_args,expected_updates",
+    [
+        param([], [], {}, id="inital"),
+        param(
+            ["--debug"],
+            [(["-dd", "--directory"], {"help": "Directory", "default": "not-set", "required": False})],
+            {c.CONFIG_DEBUG: True, c.CONFIG_LOG_LEVEL: "DEBUG", "directory": "not-set"},
+            id="debugging_with_custom_arg_notset",
+        ),
+        param(
+            ["--debug", "-dir", "/tmp/"],
+            [(["-dir", "--directory"], {"help": "Directory", "default": None, "required": False})],
+            {c.CONFIG_DEBUG: True, c.CONFIG_LOG_LEVEL: "DEBUG", "directory": "/tmp/"},
+            id="debugging_with_custom_arg_set",
+        ),
+    ],
+)
+def test_cli_custom_args_config(monkeypatch, initial_conf, cli_args, custom_args, expected_updates):
+    with monkeypatch.context() as mpctx:
+        mpctx.setattr(sys, "argv", ["config.py", *cli_args])
+        Config._CLI_PARAMS = {"desc": "test desc", "args": custom_args}
         expected = {**initial_conf, **expected_updates}
         actual = Config.all()
         assert actual == expected

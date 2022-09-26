@@ -19,14 +19,15 @@ class Config:
     _INITIALIZED: bool = False
     _CONFIG: Dict[str, Any] = {}
     _TAGS: dict = {}
+    _CLI_PARAMS: dict = {"desc": "App description", "args": []}
 
-    @staticmethod
-    def _get_cli_args():
+    @classmethod
+    def _get_cli_args(cls):
         """Parse & return command line args"""
 
         # Create the parser
         parser = argparse.ArgumentParser(
-            description="Displays app main menu",
+            description=cls._CLI_PARAMS["desc"],
             allow_abbrev=False,
             formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         )
@@ -42,6 +43,9 @@ class Config:
             default="INFO",
             required=False,
         )
+
+        for arg in cls._CLI_PARAMS["args"]:
+            parser.add_argument(*arg[0], **arg[1])
 
         cli_args, _ = parser.parse_known_args()
         return cli_args
@@ -61,7 +65,7 @@ class Config:
         static_args = {"sess_name": ""}
 
         # Merge args into 1 config
-        cls._CONFIG = {**static_args, **cli_args}
+        cls._CONFIG = static_args | cli_args
 
         # Turn string directories into path objs
         for key, val in cls._CONFIG.items():
