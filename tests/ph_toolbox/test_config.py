@@ -76,6 +76,12 @@ def test_cli_args_config(monkeypatch, initial_conf, cli_args, expected_updates):
             {c.CONFIG_DEBUG: True, c.CONFIG_LOG_LEVEL: "DEBUG", "directory": "/tmp/"},
             id="debugging_with_custom_arg_set",
         ),
+        param(
+            ["--debug", "-dd", "/tmp/"],
+            [(["-dd", "--dir_data"], {"help": "Data Directory", "default": None, "required": False})],
+            {c.CONFIG_DEBUG: True, c.CONFIG_LOG_LEVEL: "DEBUG", "dir_data": pathlib.PosixPath("/tmp")},
+            id="debugging_with_custom_arg_set_dir",
+        ),
     ],
 )
 def test_cli_custom_args_config(monkeypatch, initial_conf, cli_args, custom_args, expected_updates):
