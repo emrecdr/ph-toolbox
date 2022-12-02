@@ -25,3 +25,16 @@ Or specific test:
 ```
 
 ## Running
+
+Can be installed from https://pypi.org/project/ph-toolbox/
+
+```shell
+pipenv install ph-toolbox
+```
+
+Then can be imported into python code like below
+
+```
+from ph_toolbox.config import Config
+from ph_toolbox.utils import get_logger
+```
